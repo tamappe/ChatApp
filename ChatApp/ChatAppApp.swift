@@ -21,11 +21,14 @@ struct Home: View {
         VStack(spacing: 0) {
             TopView()
             Spacer()
-        }
+        }.edgesIgnoringSafeArea(.all)
     }
 }
 
 struct TopView: View {
+    
+    @State var search = ""
+    
     var body: some View {
         VStack(spacing: 18) {
             HStack{
@@ -64,12 +67,34 @@ struct TopView: View {
                         }, label: {
                             Image("p\(i)")
                                 .resizable()
+                                .renderingMode(.original)
                                 .frame(width: 60, height: 60)
                         })
                     }
                 }
             })
+            HStack(spacing: 15){
+                Image(systemName: "magnifyingglass")
+                    .resizable()
+                    .frame(width: 18, height: 18)
+                    .foregroundColor(Color.black.opacity(0.3))
+                TextField("Search", text: self.$search)
+            }.padding()
+            .background(Color.white)
+            .cornerRadius(8)
+            .padding(.bottom, 10)
+            
         }.padding()
+        .padding(.top, UIApplication.shared.windows.first?.safeAreaInsets.top)
         .background(Color("Color1"))
+        .clipShape(shape())
+    }
+}
+
+struct shape: Shape {
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 22, height: 22))
+        
+        return Path(path.cgPath)
     }
 }
